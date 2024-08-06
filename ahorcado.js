@@ -1,9 +1,8 @@
-
-const API_URL = "https://palabra-api.com/word"; // Debes reemplazar esto con una URL de API real
+// URL de la API
+const API_URL = "https://random-word-api.herokuapp.com/word?number=1";
 let palabra = "";
 let oculta = [];
 let cont = 6;
-let rand;
 const hueco = document.getElementById("palabra");
 const buttons = document.getElementsByClassName('letra');
 const btnInicio = document.getElementById("reset");
@@ -15,7 +14,7 @@ async function fetchPalabra() {
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
-        palabra = data.word.toUpperCase();
+        palabra = data[0].toUpperCase();
         console.log(palabra);
         inicio();
     } catch (error) {
@@ -23,26 +22,26 @@ async function fetchPalabra() {
     }
 }
 
-// Funcion para pintar los guiones de la palabra
+// función para pintar los guiones de la palabra
 function pintarGuiones(num) {
     oculta = Array(num).fill("_");
     hueco.innerHTML = oculta.join(" ");
 }
 
-// Generar abecedario
+// generar abecedario
 function generaABC(a, z) {
     document.getElementById("abcdario").innerHTML = "";
     let i = a.charCodeAt(0), j = z.charCodeAt(0);
     for (; i <= j; i++) {
         let letra = String.fromCharCode(i).toUpperCase();
         document.getElementById("abcdario").innerHTML += `<button value='${letra}' onclick='intento("${letra}")' class='letra' id='${letra}'>${letra}</button>`;
-        if (i == 110) {
+        if (i === 110) {
             document.getElementById("abcdario").innerHTML += `<button value='Ñ' onclick='intento("Ñ")' class='letra' id='Ñ'>Ñ</button>`;
         }
     }
 }
 
-// Chequear intento
+// chequear intento
 function intento(letra) {
     document.getElementById(letra).disabled = true;
     if (palabra.includes(letra)) {
@@ -63,12 +62,12 @@ function intento(letra) {
     setTimeout(() => document.getElementById("acierto").className = "", 800);
 }
 
-// Obtener pista
+// obtener pista
 function pista() {
-    document.getElementById("hueco-pista").innerHTML = "No disponible"; // Aquí podrías obtener una pista de la API
+    document.getElementById("hueco-pista").innerHTML = "No disponible"; 
 }
 
-// Comprueba si ha finalizado
+// comprueba si finalizò
 function compruebaFin() {
     if (!oculta.includes("_")) {
         document.getElementById("msg-final").innerHTML = "Felicidades !!";
@@ -90,7 +89,7 @@ function compruebaFin() {
     }
 }
 
-// Restablecer juego
+// restablecer juego
 function inicio() {
     pintarGuiones(palabra.length);
     generaABC("a", "z");
@@ -98,5 +97,5 @@ function inicio() {
     document.getElementById("intentos").innerHTML = cont;
 }
 
-// Iniciar
+// iniciar
 window.onload = fetchPalabra;
